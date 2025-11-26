@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sophat CHY - បទបង្ហាញ (Khmer)</title>
+    
+    <!-- FONTS: Kantumruy Pro Only (All Weights) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- 1. CORE VARIABLES (Future OS Theme) --- */
+        :root {
+            --glass-surface: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --accent-glow: #fbbf24;
+            --accent-secondary: #8b5cf6;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --blur-strength: 40px;
+            --dock-size: 70px;
+            --font-main: 'Kantumruy Pro', sans-serif;
+        }
+
+        /* --- 2. RESET & SETUP --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: #020617; /* Deep Tech Blue/Black */
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-size: 16px;
+        }
+
+        /* --- 3. NEW DIGITAL BACKGROUND --- */
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-color: #020617;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* Glowing Vignette */
+        .ambient-bg::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, transparent 40%, #020617 100%);
+            z-index: 0;
+        }
+
+        /* Floating Digital Elements Container */
+        .digital-layer {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;
+        }
+
+        /* SHAPE 1: PIXEL CLUSTERS (From your image) */
+        .pixel-cluster {
+            position: absolute;
+            display: grid; grid-template-columns: 1fr 1fr; width: 60px; gap: 0;
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.3));
+            animation: floatSlow 8s infinite ease-in-out;
+            opacity: 0.8;
+        }
+        .pixel { width: 30px; height: 30px; border: 1px solid rgba(0,0,0,0.2); }
+        .px-blue { background: #3b82f6; }
+        .px-orange { background: #f97316; }
+        .px-yellow { background: #fbbf24; }
+        .px-white { background: #ffffff; }
+
+        /* SHAPE 2: ARROWS (From your image) */
+        .arrow-row {
+            position: absolute;
+            display: flex; gap: 15px;
+            filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4));
+            animation: floatFast 6s infinite ease-in-out;
+            opacity: 0.7;
+        }
+        .arrow-bit {
+            width: 20px; height: 20px;
+            border-right: 6px solid; border-bottom: 6px solid;
+            transform: rotate(-45deg);
+        }
+        .ar-yellow { border-color: #fbbf24; }
+        .ar-white { border-color: #ffffff; }
+        .ar-orange { border-color: #f97316; }
+
+        /* Positions for Background Elements */
+        .obj-1 { top: 15%; left: 10%; animation-delay: 0s; transform: scale(1.2); }
+        .obj-2 { bottom: 20%; right: 10%; animation-delay: -2s; transform: scale(1.5); }
+        .obj-3 { top: 40%; right: 20%; animation-delay: -4s; opacity: 0.4; transform: scale(0.8); }
+        .obj-4 { bottom: 15%; left: 15%; animation-delay: -1s; }
+        .obj-5 { top: 10%; right: 40%; animation-delay: -3s; opacity: 0.3; }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        @keyframes floatFast {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(15px); }
+        }
+
+        /* --- 4. SCROLL SNAP CONTAINER --- */
+        .snap-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            position: relative; z-index: 10;
+        }
+
+        /* --- 5. SECTIONS --- */
+        section {
+            height: 100vh;
+            width: 100vw;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 5vh 5vw; /* Responsive padding */
+        }
+
+        /* --- 6. GLASS PANELS --- */
+        .glass-card {
+            background: var(--glass-surface);
+            backdrop-filter: blur(var(--blur-strength));
+            -webkit-backdrop-filter: blur(var(--blur-strength));
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: clamp(30px, 5vw, 80px); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
+            width: 100%; max-width: 1600px; 
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        @media (min-width: 1024px) {
+            .glass-card:hover { transform: perspective(1000px) rotateX(1deg) scale(1.005); border-color: var(--glass-highlight); }
+        }
+
+        /* --- 7. TYPOGRAPHY --- */
+        h1 { 
+            font-family: var(--font-main); font-weight: 700; 
+            font-size: clamp(2rem, 5vw, 5rem); line-height: 1.2; 
+            background: linear-gradient(to right, #fff, #fbbf24); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            margin-bottom: 1rem;
+        }
+        h2 { 
+            font-family: var(--font-main); font-size: clamp(1.5rem, 3.5vw, 3.5rem); 
+            font-weight: 600; margin-bottom: clamp(20px, 4vh, 40px); color: #fff; 
+        }
+        h3 { 
+            font-family: var(--font-main); font-size: clamp(1.2rem, 2vw, 2rem); 
+            color: #fbbf24; margin-bottom: 15px; 
+        }
+        p, li, div { font-family: var(--font-main); }
+        p, li { 
+            font-size: clamp(1rem, 1.5vw, 1.8rem); color: var(--text-secondary); 
+            line-height: 1.6; margin-bottom: 0.8em;
+        }
+
+        .tag-pill {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 10px 30px; background: rgba(251, 191, 36, 0.2);
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            border-radius: 100px; color: #fbbf24; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0px; 
+            font-size: clamp(0.9rem, 1.2vw, 1.4rem);
+            margin-bottom: 30px; box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+            font-family: var(--font-main);
+        }
+
+        /* --- 8. GRID & LAYOUT --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 5vw, 80px); align-items: center; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: clamp(20px, 3vw, 50px); }
+
+        @media (max-width: 1024px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+            section { padding: 20px; overflow-y: auto; display: block; height: auto; min-height: 100vh; }
+            .glass-card { padding: 30px; height: auto; min-height: auto; margin-top: 60px; margin-bottom: 100px; }
+            .snap-container { scroll-snap-type: none; }
+            .list-item { justify-content: center; text-align: center; }
+            .hero-icon { display: none; }
+        }
+
+        /* --- 9. COMPONENT STYLES --- */
+        .hero-icon { 
+            font-size: clamp(80px, 15vw, 250px); 
+            background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            filter: drop-shadow(0 10px 30px rgba(251, 191, 36, 0.3)); 
+        }
+        .list-item { 
+            display: flex; align-items: center; gap: 20px; margin-bottom: 20px; 
+            background: rgba(255,255,255,0.03); padding: clamp(15px, 2vh, 25px) clamp(20px, 2vw, 40px); 
+            border-radius: 20px; transition: 0.3s; border: 1px solid transparent; 
+        }
+        .list-item:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); transform: translateX(10px); }
+        .list-icon { color: #fbbf24; font-size: clamp(24px, 3vw, 40px); flex-shrink: 0; }
+        .feature-box { 
+            background: rgba(255,255,255,0.03); padding: clamp(20px, 3vw, 40px); 
+            border-radius: 24px; border: 1px solid rgba(255,255,255,0.05); 
+            text-align: center; transition: 0.3s; height: 100%;
+        }
+        .feature-box:hover { background: rgba(255,255,255,0.08); transform: translateY(-5px); }
+
+        /* --- 10. DOCK --- */
+        .dock {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+            padding: 10px 20px; display: flex; gap: 15px; z-index: 100;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6); max-width: 95vw; overflow-x: auto;
+        }
+        .dock-item {
+            width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; text-decoration: none; font-size: 24px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
+        }
+        .dock-item:hover { background: rgba(255,255,255,0.2); transform: scale(1.2) translateY(-10px); }
+        .dock-item.active { background: #fbbf24; color: #000; box-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+        .dock-tooltip {
+            position: absolute; top: -40px; background: rgba(0,0,0,0.8); color: #fff; padding: 5px 10px;
+            border-radius: 8px; font-size: 12px; opacity: 0; transition: 0.2s; pointer-events: none; white-space: nowrap;
+            font-family: var(--font-main);
+        }
+        .dock-item:hover .dock-tooltip { opacity: 1; top: -50px; }
+
+        /* --- 11. UI ELEMENTS (Buttons & Edit) --- */
+        [contenteditable="true"] { cursor: text; border-radius: 4px; transition: background 0.2s; }
+        [contenteditable="true"]:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 0 1px rgba(255,255,255,0.2); }
+        [contenteditable="true"]:focus { background: rgba(255,255,255,0.15); outline: none; box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.5); }
+        
+        #toast {
+            position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: #22c55e; color: white; padding: 12px 24px; border-radius: 50px;
+            font-weight: bold; box-shadow: 0 10px 20px rgba(0,0,0,0.5); opacity: 0; transition: 0.3s; z-index: 2000;
+            display: flex; align-items: center; gap: 8px;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Fullscreen Button Style */
+        #fullscreen-btn {
+            position: fixed; top: 30px; right: 30px;
+            background: rgba(255,255,255,0.1); color: white;
+            width: 50px; height: 50px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 2000; transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        #fullscreen-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+
+    <!-- DIGITAL BACKGROUND -->
+    <div class="ambient-bg">
+        <div class="digital-layer">
+            <div class="pixel-cluster obj-1"><div class="pixel px-blue"></div><div class="pixel" style="background: transparent"></div><div class="pixel" style="background: transparent"></div><div class="pixel px-orange"></div></div>
+            <div class="arrow-row obj-2"><div class="arrow-bit ar-yellow"></div><div class="arrow-bit ar-white"></div><div class="arrow-bit ar-orange"></div></div>
+            <div class="pixel-cluster obj-3"><div class="pixel px-yellow"></div><div class="pixel px-white"></div><div class="pixel px-orange"></div><div class="pixel px-blue"></div></div>
+            <div class="arrow-row obj-4" style="opacity: 0.5; transform: scale(0.7);"><div class="arrow-bit ar-white"></div><div class="arrow-bit ar-white"></div></div>
+            <div class="pixel-cluster obj-5" style="width: 30px;"><div class="pixel px-blue"></div></div>
+        </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div id="toast"><span class="material-symbols-rounded">check_circle</span> រក្សាទុកជោគជ័យ!</div>
+    
+    <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Full Screen (Press F)">
+        <span class="material-symbols-rounded">fullscreen</span>
+    </button>
+
+    <!-- Main Scroll Container -->
+    <div class="snap-container" id="scroller">
+
+        <!-- SLIDE 1: HERO -->
+        <section id="s1">
+            <div class="glass-card" style="text-align: center;">
+                <div class="tag-pill"><span class="material-symbols-rounded">rocket_launch</span> <span contenteditable="true">Creators Fest រដូវកាលទី ២</span></div>
+                <h1 contenteditable="true">ការកសាងទំនាក់ទំនងបច្ចេកវិទ្យា ដើម្បីភ្ជាប់សហគមន៍ឱ្យកាន់តែជិតស្និទ្ធ</h1>
+                <h2 style="font-weight: 300; opacity: 0.9; margin-top: 20px; color: #fbbf24;" contenteditable="true">ជី សុផាត (Sophat CHY)</h2>
+                <div style="height: 1px; width: 100px; background: linear-gradient(90deg, transparent, #fbbf24, transparent); margin: 30px auto;"></div>
+                <p style="font-weight: 600;" contenteditable="true">អ្នកបង្កើតមាតិកាឌីជីថល | អ្នកបណ្តុះបណ្តាល ICT | អ្នកដឹកនាំសហគមន៍</p>
+                <div style="margin-top: 40px; display: inline-flex; gap: 10px; align-items: center; background: rgba(255,255,255,0.05); padding: 10px 30px; border-radius: 50px;">
+                    <span class="material-symbols-rounded" style="color: #fbbf24;">pin_drop</span>
+                    <span contenteditable="true">Factory Phnom Penh – 29 វិច្ឆិកា 2025</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: INTRO -->
+        <section id="s2">
+            <div class="glass-card">
+                <div class="grid-2">
+                    <div>
+                        <h2 contenteditable="true">ខ្ញុំជាអ្នកណា?</h2>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">photo_camera</span>
+                            <div contenteditable="true"><strong>អ្នកបង្កើតមាតិកាឌីជីថល</strong></div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">security</span>
+                            <div contenteditable="true"><strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាពឌីជីថល</strong> និងជំនាញអនឡាញ</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">map</span>
+                            <div contenteditable="true"><strong>អ្នករៀបចំកម្មវិធី</strong> បារខែមកម្ពុជា សហគមន៍ "Local Guide" នៅកម្ពុជា</div>
+                        </div>
+                        <div style="margin-top: 30px; padding: 20px; border-left: 4px solid #fbbf24; background: rgba(251, 191, 36, 0.1);">
+                            <p style="color: #fbbf24; font-weight: bold;" contenteditable="true">បេសកកម្មសំខាន់៖</p>
+                            <p contenteditable="true">ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                         <span class="material-symbols-rounded hero-icon">person</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: WHY IT MATTERS -->
+        <section id="s3">
+            <div class="glass-card" style="text-align: center;">
+                <h2 contenteditable="true">ហេតុអ្វីបានជា ប្រធានបទនេះសំខាន់?</h2>
+                <div class="grid-3" style="margin-top: 40px;">
+                    <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 50px; color: #4ade80;">trending_up</span>
+                        <h3 contenteditable="true">កំណើន</h3>
+                        <p contenteditable="true">កម្ពុជាកំពុងរីកចម្រើនផ្នែកឌីជីថល</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 50px; color: #60a5fa;">hub</span>
+                        <h3 contenteditable="true">ការតភ្ជាប់</h3>
+                        <p contenteditable="true">មនុស្សត្រូវការការភ្ជាប់ មាតិកា និងចំណេះដឹង</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 50px; color: #fbbf24;">diversity_3</span>
+                        <h3 contenteditable="true">មនុស្សធម៌</h3>
+                        <p contenteditable="true">បច្ចេកវិទ្យាមិនមែនជាចម្លើយទាំងស្រុង — កត្តាសំខាន់គឺ “ការភ្ជាប់រវាងមនុស្ស”</p>
+                    </div>
+                </div>
+                <p style="margin-top: 40px; font-size: 1.5rem; color: #fbbf24;" contenteditable="true">គោលបំណង៖ ធ្វើឲ្យសហគមន៍ប្រើប្រាស់បច្ចេកវិទ្យាបានប្រសើរជាងមុន</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: DEFINITION -->
+        <section id="s4">
+            <div class="glass-card" style="text-align: center;">
+                <h2 contenteditable="true">“Tech Interconnection” មានន័យដូចម្តេច?</h2>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px;">
+                    <div class="tag-pill" contenteditable="true">មនុស្ស</div>
+                    <div class="tag-pill" contenteditable="true">ទីកន្លែង</div>
+                    <div class="tag-pill" contenteditable="true">ព័ត៌មាន</div>
+                    <div class="tag-pill" contenteditable="true">ឱកាស</div>
+                </div>
+                <div style="margin-top: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">link</span>
+                        <div contenteditable="true">ផ្សារភ្ជាប់អនឡាញ + អូហ្វឡាញ</div>
+                    </div>
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">share</span>
+                        <div contenteditable="true">បង្កើតការចែករំលែកចំណេះដឹង</div>
+                    </div>
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">settings_accessibility</span>
+                        <div contenteditable="true">បច្ចេកវិទ្យាជាសង្វាក់ភ្ជាប់សង្គម — <strong>មិនមែនគ្រាន់តែជាឧបករណ៍ទេ</strong></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: JOURNEY -->
+        <section id="s5">
+            <div class="glass-card">
+                <h2 contenteditable="true">ដំណើររបស់ខ្ញុំ</h2>
+                <div class="grid-2">
+                    <div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">history</span>
+                            <div contenteditable="true"><strong>12+ ឆ្នាំ</strong> ក្នុងការអភិវឌ្ឍសហគមន៍តេក<br><span style="font-size: 0.9em; opacity: 0.7;">Barcamp កម្ពុជា → អក្ខរកម្មឌីជីថល → សុវត្ថិភាពសហគ្រាសខ្នាតតូច</span></div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">map</span>
+                            <div contenteditable="true"><strong>10+ ឆ្នាំ</strong> កែលម្អ Google Maps និង Street View</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">movie</span>
+                            <div contenteditable="true">បង្កើត Vlog ដោយប្រើការធ្វើដំណើរ + រឿងរ៉ាវ</div>
+                        </div>
+                         <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">groups</span>
+                            <div contenteditable="true">បង្កើតបណ្តាញជាមួយអ្នកបង្កើតមាតិកា សហគ្រាសខ្នាតតូច និងសហគមន៍</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: center; text-align: center; border: 2px dashed #fbbf24; border-radius: 20px; padding: 20px;">
+                        <p style="font-size: 2rem; color: #fff; font-weight: bold;" contenteditable="true">“សហគមន៍ខ្លាំង ពេលយើងភ្ជាប់គ្នា”</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: ACTIONS -->
+        <section id="s6">
+            <div class="glass-card">
+                <h2 contenteditable="true">អ្វីខ្ញុំកំពុងធ្វើដើម្បីភ្ជាប់សហគមន៍</h2>
+                <div class="grid-3">
+                    <div class="feature-box" style="text-align: left;">
+                        <h3 style="color: #ef4444;" contenteditable="true">១. សុវត្ថិភាពឌីជីថល</h3>
+                        <ul>
+                            <li contenteditable="true">ការយល់ដឹងអំពីការបោកប្រាស់</li>
+                            <li contenteditable="true">ការការពារ Facebook/Telegram</li>
+                            <li contenteditable="true">គំនិតគ្លីនិកឌីជីថល</li>
+                        </ul>
+                    </div>
+                    <div class="feature-box" style="text-align: left;">
+                         <h3 style="color: #3b82f6;" contenteditable="true">២. ផែនទីឌីជីថល</h3>
+                        <ul>
+                            <li contenteditable="true">ការធ្វើបច្ចុប្បន្នភាព Google Maps</li>
+                            <li contenteditable="true">Street View នៅតំបន់ជនបទ</li>
+                            <li contenteditable="true">គាំទ្រសហគ្រាសខ្នាតតូចលើអនឡាញ</li>
+                        </ul>
+                    </div>
+                    <div class="feature-box" style="text-align: left;">
+                         <h3 style="color: #22c55e;" contenteditable="true">៣. ការបង្កើតមាតិកា</h3>
+                        <ul>
+                            <li contenteditable="true">ការនិទានរឿងអំពីការធ្វើដំណើរ</li>
+                            <li contenteditable="true">វប្បធម៌ និងទេសចរណ៍</li>
+                            <li contenteditable="true">រឿងរ៉ាវរបស់មនុស្ស</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: DIGITAL LITERACY -->
+        <section id="s7">
+            <div class="glass-card">
+                <div class="grid-2">
+                    <div style="display: flex; justify-content: center;">
+                        <span class="material-symbols-rounded hero-icon" style="color: #ef4444;">medical_services</span>
+                    </div>
+                    <div>
+                        <h2 style="color: #ef4444;" contenteditable="true">គម្រោងអក្ខរកម្មឌីជីថល</h2>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">school</span>
+                            <div contenteditable="true">បណ្តុះបណ្តាលសិស្ស និស្សិត SME និងសាធារណជន</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">trending_up</span>
+                            <div contenteditable="true">ពង្រឹងសមត្ថភាពប្រើបច្ចេកវិទ្យា</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">shield</span>
+                            <div contenteditable="true">ការពារគណនី + ការកែលម្អទម្លាប់ប្រើអនឡាញ</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">favorite</span>
+                            <div contenteditable="true">បង្កើត <strong>“គិលានុបដ្ឋាកឌីជីថល / គ្លីនិកឌីជីថល”</strong> ដើម្បីជួយសហគមន៍</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: LOCAL GUIDES -->
+        <section id="s8">
+            <div class="glass-card">
+                <h2 style="color: #3b82f6;" contenteditable="true">Cambodia Local Guides & ផែនទី</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3 contenteditable="true">តួនាទីសំខាន់:</h3>
+                        <ul>
+                            <li contenteditable="true">ជំរុញទេសចរណ៍</li>
+                            <li contenteditable="true">ភ្ជាប់អាជីវកម្មតូចៗ</li>
+                            <li contenteditable="true">បង្ហាញទីកន្លែងគ្មាននរណាមានទិន្នន័យ</li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 contenteditable="true">អ្វីខ្ញុំធ្វើ:</h3>
+                        <ul>
+                            <li contenteditable="true">Street View កន្លែងឆ្ងាយៗ</li>
+                            <li contenteditable="true">កែតម្រូវទីតាំង</li>
+                            <li contenteditable="true">បន្ថែមព័ត៌មានដែលបាត់</li>
+                            <li contenteditable="true">បណ្តុះបណ្តាលយុវជនចូលរួមចំណែក</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: TRAVEL STORIES -->
+        <section id="s9">
+            <div class="glass-card" style="text-align: center;">
+                <span class="material-symbols-rounded hero-icon" style="color: #22c55e;">auto_stories</span>
+                <h2 style="color: #22c55e; margin-top: 20px;" contenteditable="true">រឿងរ៉ាវធ្វើដំណើរ បង្កើតទំនាក់ទំនង</h2>
+                <div style="max-width: 800px; margin: 0 auto; text-align: left;">
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">visibility</span>
+                        <div contenteditable="true">បង្ហាញមុខមាត់ពិតៗនៃសហគមន៍</div>
+                    </div>
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">public</span>
+                        <div contenteditable="true">ពន្លឺវប្បធម៌ និងទេសចរណ៍ជាសកល</div>
+                    </div>
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">mic</span>
+                        <div contenteditable="true">ប្រើការនិទានរឿង ដើម្បីចែករំលែកចំណេះដឹង</div>
+                    </div>
+                    <div class="list-item">
+                        <span class="material-symbols-rounded list-icon">star</span>
+                        <div contenteditable="true">បង្កើតឥទ្ធិពល ដោយមាតិកាមានអត្ថន័យ</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: LESSONS -->
+        <section id="s10">
+            <div class="glass-card">
+                <h2 contenteditable="true">អ្វីខ្ញុំបានសិក្សាពីដំណើរ</h2>
+                <div class="grid-2">
+                     <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">psychology</span>
+                        <p contenteditable="true">បច្ចេកវិទ្យាមិនអាចជំនួសមនុស្ស</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">smartphone</span>
+                        <p contenteditable="true">ឧបករណ៍តូចៗអាចបង្កើតអត្ថប្រយោជន៍ធំ</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">rocket</span>
+                        <p contenteditable="true">យុវជនជាអនាគតនៃសហគមន៍ឌីជីថល</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">handshake</span>
+                        <p contenteditable="true">ការទុកចិត្តសង្គមជាគន្លឹះ</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 11: CASE STUDY -->
+        <section id="s11">
+            <div class="glass-card">
+                <div class="tag-pill" style="border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.1);" contenteditable="true">ករណីសិក្សា</div>
+                <h2 contenteditable="true">អូសោម និង ជួរភ្នំក្រវាញ</h2>
+                <div class="grid-2">
+                    <div>
+                        <div class="list-item">
+                             <span class="material-symbols-rounded list-icon">terrain</span>
+                             <div contenteditable="true">កែលម្អផែនទី តំបន់ភ្នំ 1500–អូសោម</div>
+                        </div>
+                        <div class="list-item">
+                             <span class="material-symbols-rounded list-icon">360</span>
+                             <div contenteditable="true">ថត Street View</div>
+                        </div>
+                        <div class="list-item">
+                             <span class="material-symbols-rounded list-icon">auto_stories</span>
+                             <div contenteditable="true">បង្កើតរឿងរ៉ាវពីជីវិតសហគមន៍</div>
+                        </div>
+                    </div>
+                     <div>
+                        <div class="list-item">
+                             <span class="material-symbols-rounded list-icon">forest</span>
+                             <div contenteditable="true">ជំរុញទេសចរណ៍ធម្មជាតិ</div>
+                        </div>
+                        <div class="list-item">
+                             <span class="material-symbols-rounded list-icon">lan</span>
+                             <div contenteditable="true">តភ្ជាប់អនឡាញ/អូហ្វឡាញ</div>
+                        </div>
+                         <div style="display: flex; justify-content: center; margin-top: 20px;">
+                            <span class="material-symbols-rounded hero-icon" style="color: #4ade80;">landscape</span>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 12: VISION -->
+        <section id="s12">
+            <div class="glass-card" style="text-align: center;">
+                <h2 contenteditable="true">ចក្ខុវិស័យ៖ ការកសាងកម្ពុជាដែលភ្ជាប់ទំនាក់ទំនងគ្នា</h2>
+                <p contenteditable="true">យើងអាចភ្ជាប់សហគមន៍តាមរយៈ៖</p>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 30px;">
+                    <div class="tag-pill" contenteditable="true">ជំនាញឌីជីថល</div>
+                    <div class="tag-pill" contenteditable="true">ការយល់ដឹងអំពីសុវត្ថិភាព</div>
+                    <div class="tag-pill" contenteditable="true">ផែនទីច្បាស់លាស់</div>
+                    <div class="tag-pill" contenteditable="true">ការគាំទ្រអាជីវកម្មក្នុងស្រុក</div>
+                    <div class="tag-pill" contenteditable="true">ការនិទានរឿងសហគមន៍</div>
+                    <div class="tag-pill" contenteditable="true">កិច្ចសហការ (រដ្ឋ + អង្គការ + អ្នកបង្កើតមាតិកា)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 13: CREATORS ROLE -->
+        <section id="s13">
+            <div class="glass-card">
+                <h2 contenteditable="true">តួនាទីអ្នកបង្កើតមាតិកាទំនើប</h2>
+                <div class="list-item">
+                    <span class="material-symbols-rounded list-icon">school</span>
+                    <div contenteditable="true">បង្កើតមាតិកាដែលអប់រំ</div>
+                </div>
+                 <div class="list-item">
+                    <span class="material-symbols-rounded list-icon">face</span>
+                    <div contenteditable="true">បង្ហាញរឿងរ៉ាវមនុស្ស</div>
+                </div>
+                 <div class="list-item">
+                    <span class="material-symbols-rounded list-icon">compare_arrows</span>
+                    <div contenteditable="true">បំពេញខុសគ្នារវាង online/offline</div>
+                </div>
+                 <div class="list-item">
+                    <span class="material-symbols-rounded list-icon">celebration</span>
+                    <div contenteditable="true">ជំរុញវប្បធម៌ និងសហគមន៍</div>
+                </div>
+                 <div class="list-item">
+                    <span class="material-symbols-rounded list-icon">volunteer_activism</span>
+                    <div contenteditable="true">កសាងទំនុកចិត្ត និងទំនាក់ទំនង</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 14: MESSAGE TO YOUTH -->
+        <section id="s14">
+            <div class="glass-card" style="text-align: center;">
+                 <span class="material-symbols-rounded hero-icon" style="color: #fbbf24;">lightbulb</span>
+                <h2 style="margin-top: 20px;" contenteditable="true">សារដល់យុវជន និងអ្នកចាប់ផ្ដើម</h2>
+                <div class="list-item" style="justify-content: center;">
+                    <div contenteditable="true">ចាប់ផ្ដើមពីអ្វីខ្លួនស្រលាញ់</div>
+                </div>
+                <div class="list-item" style="justify-content: center;">
+                    <div contenteditable="true">មិនត្រូវរង់ចាំឧបករណ៍ថ្លៃៗ</div>
+                </div>
+                <div class="list-item" style="justify-content: center;">
+                    <div contenteditable="true">សំខាន់គឺមាតិកាមានតម្លៃ</div>
+                </div>
+                 <div class="list-item" style="justify-content: center;">
+                    <div contenteditable="true">បង្កើតមាតិកាដែលជួយសង្គម</div>
+                </div>
+                <h3 style="margin-top: 30px; font-size: 1.8rem;" contenteditable="true">ការច្នៃប្រឌិត + ការទទួលខុសត្រូវ = ឥទ្ធិពល</h3>
+            </div>
+        </section>
+
+        <!-- SLIDE 15: FUTURE PLANS -->
+        <section id="s15">
+            <div class="glass-card">
+                <h2 contenteditable="true">ចក្ខុវិស័យសម្រាប់ឆ្នាំខាងមុខ</h2>
+                <div class="grid-2">
+                    <div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">ambulance</span>
+                            <div contenteditable="true">កម្មវិធីគ្លីនិកឌីជីថលចល័ត</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">movie_filter</span>
+                            <div contenteditable="true">ដំណើរកម្សាន្តដើម្បីរៀនសូត្រ និងដំណោះស្រាយឌីជីថល</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">groups</span>
+                            <div contenteditable="true">បណ្តុះបណ្តាលយុវជនឱ្យក្លាយជាអ្នករួមចំនែកឌីជីថល</div>
+                        </div>
+                    </div>
+                     <div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">public</span>
+                            <div contenteditable="true">រួមចំណែកក្នុងផែនទីឌីជីថល ទេសចរណ៍ឌីជីថល</div>
+                        </div>
+                        <div class="list-item">
+                            <span class="material-symbols-rounded list-icon">play_circle</span>
+                            <div contenteditable="true">ផលិតមាតិកាបន្ថែម និងគុណភាពប្រសើរជាងមុន</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 16: CLOSING MESSAGE -->
+        <section id="s16">
+            <div class="glass-card" style="text-align: center; border-color: #fbbf24;">
+                <h2 style="font-size: 3rem; color: #fff;" contenteditable="true">“បច្ចេកវិទ្យាខ្លាំង</h2>
+                <h2 style="font-size: 3.5rem; color: #fbbf24; margin: 20px 0;" contenteditable="true">ប៉ុន្តែ ‘ការភ្ជាប់រវាងមនុស្ស’ ខ្លាំងជាងនេះ។”</h2>
+                <p style="font-size: 1.5rem;" contenteditable="true">បើយើងប្រើទាំងពីរ — <strong>យើងកសាងកម្ពុជាឱ្យកាន់តែប្រសើរ។</strong></p>
+            </div>
+        </section>
+
+        <!-- SLIDE 17: CONTACT -->
+        <section id="s17">
+            <div class="glass-card" style="text-align: center;">
+                <h1 contenteditable="true">សំណួរ និង ចម្លើយ</h1>
+                <h2 style="margin-top: 20px;" contenteditable="true">សូមអរគុណ</h2>
+                <p style="margin: 20px 0;" contenteditable="true">តាមដានការងាររបស់ខ្ញុំ៖</p>
+                <div style="display: flex; justify-content: center; gap: 30px; font-size: 40px;">
+                    <i class="fa-brands fa-youtube hover-glow"></i>
+                    <i class="fa-brands fa-facebook hover-glow"></i>
+                    <i class="fa-brands fa-tiktok hover-glow"></i>
+                    <i class="fa-brands fa-telegram hover-glow"></i>
+                </div>
+                <div style="margin-top: 40px; font-weight: bold; font-size: 1.5rem; color: #fbbf24;" contenteditable="true">sophatchy.com</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FLOATING DOCK NAV -->
+    <div class="dock">
+        <a href="#s1" class="dock-item active" onclick="setActive(this)"><span class="material-symbols-rounded">home</span><span class="dock-tooltip">ទំព័រដើម</span></a>
+        <a href="#s2" class="dock-item" onclick="setActive(this)"><span class="material-symbols-rounded">person</span><span class="dock-tooltip">ណែនាំ</span></a>
+        <a href="#s6" class="dock-item" onclick="setActive(this)"><span class="material-symbols-rounded">work</span><span class="dock-tooltip">ការងារ</span></a>
+        <a href="#s11" class="dock-item" onclick="setActive(this)"><span class="material-symbols-rounded">landscape</span><span class="dock-tooltip">ករណីសិក្សា</span></a>
+        <a href="#s12" class="dock-item" onclick="setActive(this)"><span class="material-symbols-rounded">visibility</span><span class="dock-tooltip">ចក្ខុវិស័យ</span></a>
+        <a href="#s15" class="dock-item" onclick="setActive(this)"><span class="material-symbols-rounded">rocket_launch</span><span class="dock-tooltip">អនាគត</span></a>
+        <a href="#s17" class="dock-item" onclick="setActive(this)"><span class="material-symbols-rounded">mail</span><span class="dock-tooltip">ទំនាក់ទំនង</span></a>
+    </div>
+
+    <script>
+        // --- FULLSCREEN TOGGLE ---
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Keyboard Shortcut 'F'
+        document.addEventListener('keydown', function(e) {
+            if (e.key.toLowerCase() === 'f') {
+                toggleFullscreen();
+            }
+            // Ctrl+S to Save
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault(); 
+                downloadEditedHtml();
+            }
+        });
+
+        // --- NAVIGATION LOGIC ---
+        function setActive(element) {
+            document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        const scroller = document.getElementById('scroller');
+        const sections = document.querySelectorAll('section');
+        let currentSectionId = 's1';
+        
+        scroller.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scroller.scrollTop >= (sectionTop - section.clientHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            if (current && current !== currentSectionId) {
+                currentSectionId = current;
+                document.querySelectorAll('.dock-item').forEach(li => {
+                    li.classList.remove('active');
+                    if (li.getAttribute('href') === '#' + current) {
+                        li.classList.add('active');
+                    }
+                });
+            }
+        });
+
+        // --- SAVE FUNCTION ---
+        function downloadEditedHtml() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            const now = new Date();
+            const timestamp = now.getFullYear() + "-" + 
+                             String(now.getMonth() + 1).padStart(2, '0') + "-" + 
+                             String(now.getDate()).padStart(2, '0') + "_" + 
+                             String(now.getHours()).padStart(2, '0') + "-" + 
+                             String(now.getMinutes()).padStart(2, '0');
+            a.download = `Sophat_Presentation_Khmer_${timestamp}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+            
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+    </script>
+
+</body>
+</html>
