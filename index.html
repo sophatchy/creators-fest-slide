@@ -40,6 +40,7 @@
             height: 100vh;
             width: 100vw;
             font-size: 16px;
+            user-select: none; /* Prevents text selection for cleaner presentation */
         }
 
         /* --- 3. NEW DIGITAL BACKGROUND --- */
@@ -243,19 +244,6 @@
         }
         .dock-item:hover .dock-tooltip { opacity: 1; top: -50px; }
 
-        /* --- 11. UI ELEMENTS (Buttons & Edit) --- */
-        [contenteditable="true"] { cursor: text; border-radius: 4px; transition: background 0.2s; }
-        [contenteditable="true"]:hover { background: rgba(255,255,255,0.1); box-shadow: 0 0 0 1px rgba(255,255,255,0.2); }
-        [contenteditable="true"]:focus { background: rgba(255,255,255,0.15); outline: none; box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.5); }
-        
-        #toast {
-            position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: #22c55e; color: white; padding: 12px 24px; border-radius: 50px;
-            font-weight: bold; box-shadow: 0 10px 20px rgba(0,0,0,0.5); opacity: 0; transition: 0.3s; z-index: 2000;
-            display: flex; align-items: center; gap: 8px;
-        }
-        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
         /* Fullscreen Button Style */
         #fullscreen-btn {
             position: fixed; top: 30px; right: 30px;
@@ -284,8 +272,6 @@
     </div>
 
     <!-- CONTROLS -->
-    <div id="toast"><span class="material-symbols-rounded">check_circle</span> រក្សាទុកជោគជ័យ!</div>
-    
     <button id="fullscreen-btn" onclick="toggleFullscreen()" title="Full Screen (Press F)">
         <span class="material-symbols-rounded">fullscreen</span>
     </button>
@@ -313,22 +299,22 @@
             <div class="glass-card">
                 <div class="grid-2">
                     <div>
-                        <h2 contenteditable="true">ខ្ញុំជាអ្នកណា?</h2>
+                        <h2>ខ្ញុំជាអ្នកណា?</h2>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">photo_camera</span>
-                            <div contenteditable="true"><strong>អ្នកបង្កើតមាតិកាឌីជីថល</strong></div>
+                            <div><strong>អ្នកបង្កើតមាតិកាឌីជីថល</strong></div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">security</span>
-                            <div contenteditable="true"><strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាពឌីជីថល</strong> និងជំនាញអនឡាញ</div>
+                            <div><strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាពឌីជីថល</strong> និងជំនាញអនឡាញ</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">map</span>
-                            <div contenteditable="true"><strong>អ្នករៀបចំកម្មវិធី</strong> បារខែមកម្ពុជា សហគមន៍ "Local Guide" នៅកម្ពុជា</div>
+                            <div><strong>អ្នករៀបចំកម្មវិធី</strong> បារខែមកម្ពុជា សហគមន៍ "Local Guide" នៅកម្ពុជា</div>
                         </div>
                         <div style="margin-top: 30px; padding: 20px; border-left: 4px solid #fbbf24; background: rgba(251, 191, 36, 0.1);">
-                            <p style="color: #fbbf24; font-weight: bold;" contenteditable="true">បេសកកម្មសំខាន់៖</p>
-                            <p contenteditable="true">ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស</p>
+                            <p style="color: #fbbf24; font-weight: bold;">បេសកកម្មសំខាន់៖</p>
+                            <p>ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស</p>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: center;">
@@ -341,50 +327,92 @@
         <!-- SLIDE 3: WHY IT MATTERS -->
         <section id="s3">
             <div class="glass-card" style="text-align: center;">
-                <h2 contenteditable="true">ហេតុអ្វីបានជា ប្រធានបទនេះសំខាន់?</h2>
+                <h2>ហេតុអ្វីបានជា ប្រធានបទនេះសំខាន់?</h2>
                 <div class="grid-3" style="margin-top: 40px;">
                     <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 50px; color: #4ade80;">trending_up</span>
-                        <h3 contenteditable="true">កំណើន</h3>
-                        <p contenteditable="true">កម្ពុជាកំពុងរីកចម្រើនផ្នែកឌីជីថល</p>
+                        <h3>កំណើន</h3>
+                        <p>កម្ពុជាកំពុងរីកចម្រើនផ្នែកឌីជីថល</p>
                     </div>
                     <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 50px; color: #60a5fa;">hub</span>
-                        <h3 contenteditable="true">ការតភ្ជាប់</h3>
-                        <p contenteditable="true">មនុស្សត្រូវការការភ្ជាប់ មាតិកា និងចំណេះដឹង</p>
+                        <h3>ការតភ្ជាប់</h3>
+                        <p>មនុស្សត្រូវការការភ្ជាប់ មាតិកា និងចំណេះដឹង</p>
                     </div>
                     <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 50px; color: #fbbf24;">diversity_3</span>
-                        <h3 contenteditable="true">មនុស្សធម៌</h3>
-                        <p contenteditable="true">បច្ចេកវិទ្យាមិនមែនជាចម្លើយទាំងស្រុង — កត្តាសំខាន់គឺ “ការភ្ជាប់រវាងមនុស្ស”</p>
+                        <h3>មនុស្សធម៌</h3>
+                        <p>បច្ចេកវិទ្យាមិនមែនជាដំណោះស្រាយទាំងស្រុងទេ — កត្តាសំខាន់គឺ “ការភ្ជាប់រវាងមនុស្ស និងសហគមន៍ ”</p>
                     </div>
                 </div>
-                <p style="margin-top: 40px; font-size: 1.5rem; color: #fbbf24;" contenteditable="true">គោលបំណង៖ ធ្វើឲ្យសហគមន៍ប្រើប្រាស់បច្ចេកវិទ្យាបានប្រសើរជាងមុន</p>
+                <p style="margin-top: 40px; font-size: 1.5rem; color: #fbbf24;">គោលបំណង៖ ធ្វើឲ្យសហគមន៍ប្រើប្រាស់បច្ចេកវិទ្យាបានប្រសើរជាងមុន</p>
             </div>
         </section>
 
         <!-- SLIDE 4: DEFINITION -->
         <section id="s4">
             <div class="glass-card" style="text-align: center;">
-                <h2 contenteditable="true">“Tech Interconnection” មានន័យដូចម្តេច?</h2>
+                <h2>“Tech Interconnection” មានន័យដូចម្តេច?</h2>
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px;">
-                    <div class="tag-pill" contenteditable="true">មនុស្ស</div>
-                    <div class="tag-pill" contenteditable="true">ទីកន្លែង</div>
-                    <div class="tag-pill" contenteditable="true">ព័ត៌មាន</div>
-                    <div class="tag-pill" contenteditable="true">ឱកាស</div>
+                    <div class="tag-pill">មនុស្ស</div>
+                    <div class="tag-pill">ទីកន្លែង</div>
+                    <div class="tag-pill">ព័ត៌មាន</div>
+                    <div class="tag-pill">ឱកាស</div>
                 </div>
                 <div style="margin-top: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">link</span>
-                        <div contenteditable="true">ផ្សារភ្ជាប់អនឡាញ + អូហ្វឡាញ</div>
+                        <div>ផ្សារភ្ជាប់អនឡាញ + អូហ្វឡាញ</div>
                     </div>
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">share</span>
-                        <div contenteditable="true">បង្កើតការចែករំលែកចំណេះដឹង</div>
+                        <div>បង្កើតការចែករំលែកចំណេះដឹង</div>
                     </div>
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">settings_accessibility</span>
-                        <div contenteditable="true">បច្ចេកវិទ្យាជាសង្វាក់ភ្ជាប់សង្គម — <strong>មិនមែនគ្រាន់តែជាឧបករណ៍ទេ</strong></div>
+                        <div>បច្ចេកវិទ្យាជាសង្វាក់ភ្ជាប់សង្គម — <strong>មិនមែនគ្រាន់តែជាឧបករណ៍ទេ</strong></div>
+                    </div>
+                </div>
+                
+                <!-- LINKING ELEMENT (NEW) -->
+                <div style="margin-top: 30px; opacity: 0.8; animation: float 2s infinite;">
+                    <p style="font-size: 1rem; color: #fbbf24; margin-bottom: 5px;">តើគំនិតនេះអនុវត្តយ៉ាងដូចម្តេច?</p>
+                    <span class="material-symbols-rounded" style="font-size: 30px; color: #fbbf24;">keyboard_double_arrow_down</span>
+                </div>
+            </div>
+        </section>
+        <!-- NEW SLIDE: CONTEXTS (Updated for Consistency) -->
+        <section id="s4_expanded">
+            <div class="glass-card">
+                <!-- Bridging Text -->
+                <p style="text-align: center; color: #94a3b8; margin-bottom: 10px; font-size: 1.1rem;">ការបកស្រាយលម្អិតអំពី៖</p>
+                
+                <!-- UPDATED TITLE FOR CONSISTENCY -->
+                <h2 style="font-size: clamp(1.8rem, 4vw, 3rem); text-align: center; margin-bottom: 10px; color: #fbbf24;">បរិបទនៃការស្ថាបនាទំនាក់ទំនងបច្ចេកវិទ្យា</h2>
+                <p style="text-align: center; color: #e2e8f0; margin-bottom: 40px; font-size: 1.2rem;">(Building Tech Interconnections to Connect Communities Closer)</p>
+                
+                <div class="grid-2">
+                    <!-- Column 1 -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="feature-box" style="text-align: left; border-left: 4px solid #4ade80;">
+                            <h3 style="color: #4ade80; font-size: 1.2rem; margin-bottom: 10px;">១. ការកសាងសហគមន៍ក្នុងយុគសម័យឌីជីថល</h3>
+                            <p style="font-size: 0.95rem;">បច្ចេកវិទ្យាផ្តល់ឱកាសថ្មីៗសម្រាប់មនុស្សក្នុងការស្វែងរកគ្នា ចែករំលែកព័ត៌មាន និងបង្កើតបណ្តាញគាំទ្រ ដែលជារឿយៗភ្ជាប់ពិភពអនឡាញ និងក្រៅបណ្តាញ។</p>
+                        </div>
+                        <div class="feature-box" style="text-align: left; border-left: 4px solid #60a5fa;">
+                            <h3 style="color: #60a5fa; font-size: 1.2rem; margin-bottom: 10px;">២. ទីក្រុងឆ្លាតវៃ និងហេដ្ឋារចនាសម្ព័ន្ធ</h3>
+                            <p style="font-size: 0.95rem;">បច្ចេកវិទ្យាដែលបានតភ្ជាប់ (ឧទាហរណ៍៖ ប្រព័ន្ធថាមពល ទឹក និងការដឹកជញ្ជូនឆ្លាតវៃ) ដំណើរការរួមគ្នាដើម្បីបង្កើតសហគមន៍ដែលមានប្រសិទ្ធភាព និរន្តរភាព និងធន់ជាងមុន។</p>
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <div class="feature-box" style="text-align: left; border-left: 4px solid #fbbf24;">
+                            <h3 style="color: #fbbf24; font-size: 1.2rem; margin-bottom: 10px;">៣. រដ្ឋាភិបាល និងសេវាសាធារណៈ</h3>
+                            <p style="font-size: 0.95rem;">ប្រព័ន្ធឌីជីថលអនុញ្ញាតឱ្យចែករំលែកការយល់ដឹងឆ្លងកាត់នាយកដ្ឋាននានា ដែលនាំទៅរកការចូលរួមជាសាធារណៈប្រកបដោយប្រសិទ្ធភាព និងវិធានការសុវត្ថិភាពកាន់តែប្រសើរ។</p>
+                        </div>
+                        <div class="feature-box" style="text-align: left; border-left: 4px solid #f472b6;">
+                            <h3 style="color: #f472b6; font-size: 1.2rem; margin-bottom: 10px;">៤. តម្រូវការរបស់មនុស្សសម្រាប់ការតភ្ជាប់</h3>
+                            <p style="font-size: 0.95rem;">មនុស្សនៅតែត្រូវការអន្តរកម្មសង្គមជាក់ស្តែង។ បច្ចេកវិទ្យាត្រូវបានគេមើលឃើញថាជាស្ពាន ឬជាអ្នកផ្តល់លទ្ធភាពសម្រាប់អន្តរកម្មទាំងនេះ មិនមែនជាទីបញ្ចប់នៅក្នុងខ្លួនវានោះទេ។</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -393,28 +421,28 @@
         <!-- SLIDE 5: JOURNEY -->
         <section id="s5">
             <div class="glass-card">
-                <h2 contenteditable="true">ដំណើររបស់ខ្ញុំ</h2>
+                <h2>ដំណើររបស់ខ្ញុំ</h2>
                 <div class="grid-2">
                     <div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">history</span>
-                            <div contenteditable="true"><strong>12+ ឆ្នាំ</strong> ក្នុងការអភិវឌ្ឍសហគមន៍តេក<br><span style="font-size: 0.9em; opacity: 0.7;">Barcamp កម្ពុជា → អក្ខរកម្មឌីជីថល → សុវត្ថិភាពសហគ្រាសខ្នាតតូច</span></div>
+                            <div><strong>15+ ឆ្នាំ</strong> ក្នុងការអភិវឌ្ឍសហគមន៍បច្ចេកវិទ្យា<br><span style="font-size: 0.9em; opacity: 0.7;">បារខែមកម្ពុជា → អក្ខរកម្មឌីជីថល → អ្នកផលិតមាតិការឌីជីថល</span></div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">map</span>
-                            <div contenteditable="true"><strong>10+ ឆ្នាំ</strong> កែលម្អ Google Maps និង Street View</div>
+                            <div><strong>15+ ឆ្នាំ</strong> កែលម្អ Google Maps និង Street View</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">movie</span>
-                            <div contenteditable="true">បង្កើត Vlog ដោយប្រើការធ្វើដំណើរ + រឿងរ៉ាវ</div>
+                            <div>បង្កើត <strong>មាតិកា</strong> ដោយប្រើការធ្វើដំណើរ + អង្កេតរកដំណោះស្រាយ</div>
                         </div>
                          <div class="list-item">
                             <span class="material-symbols-rounded list-icon">groups</span>
-                            <div contenteditable="true">បង្កើតបណ្តាញជាមួយអ្នកបង្កើតមាតិកា សហគ្រាសខ្នាតតូច និងសហគមន៍</div>
+                            <div>បង្កើតបណ្តាញជាមួយអ្នកបង្កើតមាតិកា សហគ្រាសខ្នាតតូច និងសហគមន៍</div>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; justify-content: center; text-align: center; border: 2px dashed #fbbf24; border-radius: 20px; padding: 20px;">
-                        <p style="font-size: 2rem; color: #fff; font-weight: bold;" contenteditable="true">“សហគមន៍ខ្លាំង ពេលយើងភ្ជាប់គ្នា”</p>
+                        <p style="font-size: 2rem; color: #fff; font-weight: bold;">“សហគមន៍ខ្លាំង ពេលយើងភ្ជាប់គ្នា”</p>
                     </div>
                 </div>
             </div>
@@ -423,30 +451,30 @@
         <!-- SLIDE 6: ACTIONS -->
         <section id="s6">
             <div class="glass-card">
-                <h2 contenteditable="true">អ្វីខ្ញុំកំពុងធ្វើដើម្បីភ្ជាប់សហគមន៍</h2>
+                <h2>អ្វីខ្ញុំកំពុងធ្វើដើម្បីភ្ជាប់សហគមន៍</h2>
                 <div class="grid-3">
                     <div class="feature-box" style="text-align: left;">
-                        <h3 style="color: #ef4444;" contenteditable="true">១. សុវត្ថិភាពឌីជីថល</h3>
+                        <h3 style="color: #ef4444;">១. សុវត្ថិភាពឌីជីថល</h3>
                         <ul>
-                            <li contenteditable="true">ការយល់ដឹងអំពីការបោកប្រាស់</li>
-                            <li contenteditable="true">ការការពារ Facebook/Telegram</li>
-                            <li contenteditable="true">គំនិតគ្លីនិកឌីជីថល</li>
+                            <li>ការយល់ដឹងអំពីការបោកប្រាស់</li>
+                            <li>ការការពារ Facebook/Telegram</li>
+                            <li>គំនិតគ្លីនិកឌីជីថល</li>
                         </ul>
                     </div>
                     <div class="feature-box" style="text-align: left;">
-                         <h3 style="color: #3b82f6;" contenteditable="true">២. ផែនទីឌីជីថល</h3>
+                         <h3 style="color: #3b82f6;">២. ផែនទីឌីជីថល</h3>
                         <ul>
-                            <li contenteditable="true">ការធ្វើបច្ចុប្បន្នភាព Google Maps</li>
-                            <li contenteditable="true">Street View នៅតំបន់ជនបទ</li>
-                            <li contenteditable="true">គាំទ្រសហគ្រាសខ្នាតតូចលើអនឡាញ</li>
+                            <li>ការធ្វើបច្ចុប្បន្នភាព Google Maps</li>
+                            <li>Street View នៅតំបន់ជនបទ</li>
+                            <li>គាំទ្រសហគ្រាសខ្នាតតូចលើអនឡាញ</li>
                         </ul>
                     </div>
                     <div class="feature-box" style="text-align: left;">
-                         <h3 style="color: #22c55e;" contenteditable="true">៣. ការបង្កើតមាតិកា</h3>
+                         <h3 style="color: #22c55e;">៣. ការបង្កើតមាតិកា</h3>
                         <ul>
-                            <li contenteditable="true">ការនិទានរឿងអំពីការធ្វើដំណើរ</li>
-                            <li contenteditable="true">វប្បធម៌ និងទេសចរណ៍</li>
-                            <li contenteditable="true">រឿងរ៉ាវរបស់មនុស្ស</li>
+                            <li>ការនិទានរឿងអំពីការធ្វើដំណើរ</li>
+                            <li>វប្បធម៌ និងទេសចរណ៍</li>
+                            <li>រឿងរ៉ាវរបស់មនុស្ស</li>
                         </ul>
                     </div>
                 </div>
@@ -461,22 +489,22 @@
                         <span class="material-symbols-rounded hero-icon" style="color: #ef4444;">medical_services</span>
                     </div>
                     <div>
-                        <h2 style="color: #ef4444;" contenteditable="true">គម្រោងអក្ខរកម្មឌីជីថល</h2>
+                        <h2 style="color: #ef4444;">គម្រោងអក្ខរកម្មឌីជីថល</h2>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">school</span>
-                            <div contenteditable="true">បណ្តុះបណ្តាលសិស្ស និស្សិត SME និងសាធារណជន</div>
+                            <div>បណ្តុះបណ្តាលមន្ត្រីរាជការ និងប្រជាពលរដ្ឋមូលដ្ឋាន</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">trending_up</span>
-                            <div contenteditable="true">ពង្រឹងសមត្ថភាពប្រើបច្ចេកវិទ្យា</div>
+                            <div>ពង្រឹងសមត្ថភាពប្រើបច្ចេកវិទ្យា</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">shield</span>
-                            <div contenteditable="true">ការពារគណនី + ការកែលម្អទម្លាប់ប្រើអនឡាញ</div>
+                            <div>ការពារគណនី + ការកែលម្អទម្លាប់ប្រើអនឡាញ</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">favorite</span>
-                            <div contenteditable="true">បង្កើត <strong>“គិលានុបដ្ឋាកឌីជីថល / គ្លីនិកឌីជីថល”</strong> ដើម្បីជួយសហគមន៍</div>
+                            <div>បង្កើត <strong>“ពេទ្យឌីជីថល / គ្លីនិកឌីជីថល”</strong> ដើម្បីជួយសហគមន៍</div>
                         </div>
                     </div>
                 </div>
@@ -486,23 +514,23 @@
         <!-- SLIDE 8: LOCAL GUIDES -->
         <section id="s8">
             <div class="glass-card">
-                <h2 style="color: #3b82f6;" contenteditable="true">Cambodia Local Guides & ផែនទី</h2>
+                <h2 style="color: #3b82f6;">Cambodia Local Guides & ផែនទី</h2>
                 <div class="grid-2">
                     <div>
-                        <h3 contenteditable="true">តួនាទីសំខាន់:</h3>
+                        <h3>តួនាទីសំខាន់:</h3>
                         <ul>
-                            <li contenteditable="true">ជំរុញទេសចរណ៍</li>
-                            <li contenteditable="true">ភ្ជាប់អាជីវកម្មតូចៗ</li>
-                            <li contenteditable="true">បង្ហាញទីកន្លែងគ្មាននរណាមានទិន្នន័យ</li>
+                            <li>ជំរុញទេសចរណ៍</li>
+                            <li>ដោះស្រាយសម្រាប់អាជីវកម្មសម័យឌីជីថល</li>
+                            <li>ទិន្ន័យឌីជីថលជួយជំរុញការងារអាជីវកម្ម ទេសចរណ៍ និងការងារ</li>
                         </ul>
                     </div>
                      <div>
-                        <h3 contenteditable="true">អ្វីខ្ញុំធ្វើ:</h3>
+                        <h3>អ្វីខ្ញុំធ្វើ:</h3>
                         <ul>
-                            <li contenteditable="true">Street View កន្លែងឆ្ងាយៗ</li>
-                            <li contenteditable="true">កែតម្រូវទីតាំង</li>
-                            <li contenteditable="true">បន្ថែមព័ត៌មានដែលបាត់</li>
-                            <li contenteditable="true">បណ្តុះបណ្តាលយុវជនចូលរួមចំណែក</li>
+                            <li>Street View កន្លែងឆ្ងាយៗ</li>
+                            <li>កែតម្រូវទីតាំង</li>
+                            <li>បន្ថែមព័ត៌មានដែលបាត់</li>
+                            <li>បណ្តុះបណ្តាលយុវជនចូលរួមចំណែក</li>
                         </ul>
                     </div>
                 </div>
@@ -513,23 +541,23 @@
         <section id="s9">
             <div class="glass-card" style="text-align: center;">
                 <span class="material-symbols-rounded hero-icon" style="color: #22c55e;">auto_stories</span>
-                <h2 style="color: #22c55e; margin-top: 20px;" contenteditable="true">រឿងរ៉ាវធ្វើដំណើរ បង្កើតទំនាក់ទំនង</h2>
+                <h2 style="color: #22c55e; margin-top: 20px;">រឿងរ៉ាវធ្វើដំណើរ បង្កើតទំនាក់ទំនង</h2>
                 <div style="max-width: 800px; margin: 0 auto; text-align: left;">
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">visibility</span>
-                        <div contenteditable="true">បង្ហាញមុខមាត់ពិតៗនៃសហគមន៍</div>
+                        <div>បង្ហាញមុខមាត់ពិតៗនៃសហគមន៍</div>
                     </div>
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">public</span>
-                        <div contenteditable="true">ពន្លឺវប្បធម៌ និងទេសចរណ៍ជាសកល</div>
+                        <div>ពន្លឺវប្បធម៌ និងទេសចរណ៍ជាសកល</div>
                     </div>
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">mic</span>
-                        <div contenteditable="true">ប្រើការនិទានរឿង ដើម្បីចែករំលែកចំណេះដឹង</div>
+                        <div>ប្រើការនិទានរឿង ដើម្បីចែករំលែកចំណេះដឹង</div>
                     </div>
                     <div class="list-item">
                         <span class="material-symbols-rounded list-icon">star</span>
-                        <div contenteditable="true">បង្កើតឥទ្ធិពល ដោយមាតិកាមានអត្ថន័យ</div>
+                        <div>បង្កើតឥទ្ធិពល ដោយមាតិកាមានអត្ថន័យ</div>
                     </div>
                 </div>
             </div>
@@ -538,23 +566,23 @@
         <!-- SLIDE 10: LESSONS -->
         <section id="s10">
             <div class="glass-card">
-                <h2 contenteditable="true">អ្វីខ្ញុំបានសិក្សាពីដំណើរ</h2>
+                <h2>អ្វីខ្ញុំបានសិក្សាពីដំណើរ</h2>
                 <div class="grid-2">
                      <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">psychology</span>
-                        <p contenteditable="true">បច្ចេកវិទ្យាមិនអាចជំនួសមនុស្ស</p>
+                        <p>បច្ចេកវិទ្យាមិនអាចជំនួសមនុស្ស</p>
                     </div>
                     <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">smartphone</span>
-                        <p contenteditable="true">ឧបករណ៍តូចៗអាចបង្កើតអត្ថប្រយោជន៍ធំ</p>
+                        <p>ឧបករណ៍តូចៗអាចបង្កើតអត្ថប្រយោជន៍ធំ</p>
                     </div>
                     <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">rocket</span>
-                        <p contenteditable="true">យុវជនជាអនាគតនៃសហគមន៍ឌីជីថល</p>
+                        <p>យុវជនជាអនាគតនៃសហគមន៍ឌីជីថល</p>
                     </div>
                     <div class="feature-box">
                         <span class="material-symbols-rounded" style="font-size: 40px; color: #fbbf24;">handshake</span>
-                        <p contenteditable="true">ការទុកចិត្តសង្គមជាគន្លឹះ</p>
+                        <p>ការទុកចិត្តសង្គមជាគន្លឹះ</p>
                     </div>
                 </div>
             </div>
@@ -563,31 +591,31 @@
         <!-- SLIDE 11: CASE STUDY -->
         <section id="s11">
             <div class="glass-card">
-                <div class="tag-pill" style="border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.1);" contenteditable="true">ករណីសិក្សា</div>
-                <h2 contenteditable="true">អូសោម និង ជួរភ្នំក្រវាញ</h2>
+                <div class="tag-pill" style="border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.1);">ករណីសិក្សា</div>
+                <h2>អូសោម និង ជួរភ្នំក្រវាញ</h2>
                 <div class="grid-2">
                     <div>
                         <div class="list-item">
                              <span class="material-symbols-rounded list-icon">terrain</span>
-                             <div contenteditable="true">កែលម្អផែនទី តំបន់ភ្នំ 1500–អូសោម</div>
+                             <div>កែលម្អផែនទី តំបន់ភ្នំ 1500–អូសោម</div>
                         </div>
                         <div class="list-item">
                              <span class="material-symbols-rounded list-icon">360</span>
-                             <div contenteditable="true">ថត Street View</div>
+                             <div>ថត Street View</div>
                         </div>
                         <div class="list-item">
                              <span class="material-symbols-rounded list-icon">auto_stories</span>
-                             <div contenteditable="true">បង្កើតរឿងរ៉ាវពីជីវិតសហគមន៍</div>
+                             <div>បង្កើតរឿងរ៉ាវពីជីវិតសហគមន៍</div>
                         </div>
                     </div>
                      <div>
                         <div class="list-item">
                              <span class="material-symbols-rounded list-icon">forest</span>
-                             <div contenteditable="true">ជំរុញទេសចរណ៍ធម្មជាតិ</div>
+                             <div>ជំរុញទេសចរណ៍ធម្មជាតិ</div>
                         </div>
                         <div class="list-item">
                              <span class="material-symbols-rounded list-icon">lan</span>
-                             <div contenteditable="true">តភ្ជាប់អនឡាញ/អូហ្វឡាញ</div>
+                             <div>តភ្ជាប់អនឡាញ/អូហ្វឡាញ</div>
                         </div>
                          <div style="display: flex; justify-content: center; margin-top: 20px;">
                             <span class="material-symbols-rounded hero-icon" style="color: #4ade80;">landscape</span>
@@ -600,15 +628,15 @@
         <!-- SLIDE 12: VISION -->
         <section id="s12">
             <div class="glass-card" style="text-align: center;">
-                <h2 contenteditable="true">ចក្ខុវិស័យ៖ ការកសាងកម្ពុជាដែលភ្ជាប់ទំនាក់ទំនងគ្នា</h2>
-                <p contenteditable="true">យើងអាចភ្ជាប់សហគមន៍តាមរយៈ៖</p>
+                <h2>ចក្ខុវិស័យ៖ ការកសាងកម្ពុជាដែលភ្ជាប់ទំនាក់ទំនងគ្នា</h2>
+                <p>យើងអាចភ្ជាប់សហគមន៍តាមរយៈ៖</p>
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 30px;">
-                    <div class="tag-pill" contenteditable="true">ជំនាញឌីជីថល</div>
-                    <div class="tag-pill" contenteditable="true">ការយល់ដឹងអំពីសុវត្ថិភាព</div>
-                    <div class="tag-pill" contenteditable="true">ផែនទីច្បាស់លាស់</div>
-                    <div class="tag-pill" contenteditable="true">ការគាំទ្រអាជីវកម្មក្នុងស្រុក</div>
-                    <div class="tag-pill" contenteditable="true">ការនិទានរឿងសហគមន៍</div>
-                    <div class="tag-pill" contenteditable="true">កិច្ចសហការ (រដ្ឋ + អង្គការ + អ្នកបង្កើតមាតិកា)</div>
+                    <div class="tag-pill">ជំនាញឌីជីថល</div>
+                    <div class="tag-pill">ការយល់ដឹងអំពីសុវត្ថិភាព</div>
+                    <div class="tag-pill">ផែនទីច្បាស់លាស់</div>
+                    <div class="tag-pill">ការគាំទ្រអាជីវកម្មក្នុងស្រុក</div>
+                    <div class="tag-pill">ការនិទានរឿងសហគមន៍</div>
+                    <div class="tag-pill">កិច្ចសហការ (រដ្ឋ + អង្គការ + អ្នកបង្កើតមាតិកា)</div>
                 </div>
             </div>
         </section>
@@ -616,26 +644,26 @@
         <!-- SLIDE 13: CREATORS ROLE -->
         <section id="s13">
             <div class="glass-card">
-                <h2 contenteditable="true">តួនាទីអ្នកបង្កើតមាតិកាទំនើប</h2>
+                <h2>តួនាទីអ្នកបង្កើតមាតិកាទំនើប</h2>
                 <div class="list-item">
                     <span class="material-symbols-rounded list-icon">school</span>
-                    <div contenteditable="true">បង្កើតមាតិកាដែលអប់រំ</div>
+                    <div>បង្កើតមាតិកាដែលអប់រំ</div>
                 </div>
                  <div class="list-item">
                     <span class="material-symbols-rounded list-icon">face</span>
-                    <div contenteditable="true">បង្ហាញរឿងរ៉ាវមនុស្ស</div>
+                    <div>បង្ហាញរឿងរ៉ាវមនុស្ស</div>
                 </div>
                  <div class="list-item">
                     <span class="material-symbols-rounded list-icon">compare_arrows</span>
-                    <div contenteditable="true">បំពេញខុសគ្នារវាង online/offline</div>
+                    <div>បំពេញខុសគ្នារវាង online/offline</div>
                 </div>
                  <div class="list-item">
                     <span class="material-symbols-rounded list-icon">celebration</span>
-                    <div contenteditable="true">ជំរុញវប្បធម៌ និងសហគមន៍</div>
+                    <div>ជំរុញវប្បធម៌ និងសហគមន៍</div>
                 </div>
                  <div class="list-item">
                     <span class="material-symbols-rounded list-icon">volunteer_activism</span>
-                    <div contenteditable="true">កសាងទំនុកចិត្ត និងទំនាក់ទំនង</div>
+                    <div>កសាងទំនុកចិត្ត និងទំនាក់ទំនង</div>
                 </div>
             </div>
         </section>
@@ -644,50 +672,50 @@
         <section id="s14">
             <div class="glass-card" style="text-align: center;">
                  <span class="material-symbols-rounded hero-icon" style="color: #fbbf24;">lightbulb</span>
-                <h2 style="margin-top: 20px;" contenteditable="true">សារដល់យុវជន និងអ្នកចាប់ផ្ដើម</h2>
+                <h2 style="margin-top: 20px;">សារដល់យុវជន និងអ្នកចាប់ផ្ដើម</h2>
                 <div class="list-item" style="justify-content: center;">
-                    <div contenteditable="true">ចាប់ផ្ដើមពីអ្វីខ្លួនស្រលាញ់</div>
+                    <div>ចាប់ផ្ដើមពីអ្វីខ្លួនស្រលាញ់</div>
                 </div>
                 <div class="list-item" style="justify-content: center;">
-                    <div contenteditable="true">មិនត្រូវរង់ចាំឧបករណ៍ថ្លៃៗ</div>
+                    <div>មិនត្រូវរង់ចាំឧបករណ៍ថ្លៃៗ</div>
                 </div>
                 <div class="list-item" style="justify-content: center;">
-                    <div contenteditable="true">សំខាន់គឺមាតិកាមានតម្លៃ</div>
+                    <div>សំខាន់គឺមាតិកាមានតម្លៃ</div>
                 </div>
                  <div class="list-item" style="justify-content: center;">
-                    <div contenteditable="true">បង្កើតមាតិកាដែលជួយសង្គម</div>
+                    <div>បង្កើតមាតិកាដែលជួយសង្គម</div>
                 </div>
-                <h3 style="margin-top: 30px; font-size: 1.8rem;" contenteditable="true">ការច្នៃប្រឌិត + ការទទួលខុសត្រូវ = ឥទ្ធិពល</h3>
+                <h3 style="margin-top: 30px; font-size: 1.8rem;">ការច្នៃប្រឌិត + ការទទួលខុសត្រូវ = ឥទ្ធិពល</h3>
             </div>
         </section>
 
         <!-- SLIDE 15: FUTURE PLANS -->
         <section id="s15">
             <div class="glass-card">
-                <h2 contenteditable="true">ចក្ខុវិស័យសម្រាប់ឆ្នាំខាងមុខ</h2>
+                <h2>ចក្ខុវិស័យសម្រាប់ឆ្នាំខាងមុខ</h2>
                 <div class="grid-2">
                     <div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">ambulance</span>
-                            <div contenteditable="true">កម្មវិធីគ្លីនិកឌីជីថលចល័ត</div>
+                            <div>កម្មវិធីគ្លីនិកឌីជីថលចល័ត</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">movie_filter</span>
-                            <div contenteditable="true">ដំណើរកម្សាន្តដើម្បីរៀនសូត្រ និងដំណោះស្រាយឌីជីថល</div>
+                            <div>ដំណើរកម្សាន្តដើម្បីរៀនសូត្រ និងដំណោះស្រាយឌីជីថល</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">groups</span>
-                            <div contenteditable="true">បណ្តុះបណ្តាលយុវជនឱ្យក្លាយជាអ្នករួមចំនែកឌីជីថល</div>
+                            <div>បណ្តុះបណ្តាលយុវជនឱ្យក្លាយជាអ្នករួមចំនែកឌីជីថល</div>
                         </div>
                     </div>
                      <div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">public</span>
-                            <div contenteditable="true">រួមចំណែកក្នុងផែនទីឌីជីថល ទេសចរណ៍ឌីជីថល</div>
+                            <div>រួមចំណែកក្នុងផែនទីឌីជីថល ទេសចរណ៍ឌីជីថល</div>
                         </div>
                         <div class="list-item">
                             <span class="material-symbols-rounded list-icon">play_circle</span>
-                            <div contenteditable="true">ផលិតមាតិកាបន្ថែម និងគុណភាពប្រសើរជាងមុន</div>
+                            <div>ផលិតមាតិកាបន្ថែម និងគុណភាពប្រសើរជាងមុន</div>
                         </div>
                     </div>
                 </div>
@@ -697,25 +725,25 @@
         <!-- SLIDE 16: CLOSING MESSAGE -->
         <section id="s16">
             <div class="glass-card" style="text-align: center; border-color: #fbbf24;">
-                <h2 style="font-size: 3rem; color: #fff;" contenteditable="true">“បច្ចេកវិទ្យាខ្លាំង</h2>
-                <h2 style="font-size: 3.5rem; color: #fbbf24; margin: 20px 0;" contenteditable="true">ប៉ុន្តែ ‘ការភ្ជាប់រវាងមនុស្ស’ ខ្លាំងជាងនេះ។”</h2>
-                <p style="font-size: 1.5rem;" contenteditable="true">បើយើងប្រើទាំងពីរ — <strong>យើងកសាងកម្ពុជាឱ្យកាន់តែប្រសើរ។</strong></p>
+                <h2 style="font-size: 3rem; color: #fff;">“បច្ចេកវិទ្យាខ្លាំង</h2>
+                <h2 style="font-size: 3.5rem; color: #fbbf24; margin: 20px 0;">ប៉ុន្តែ ‘ការភ្ជាប់រវាងមនុស្ស’ ខ្លាំងជាងនេះ។”</h2>
+                <p style="font-size: 1.5rem;">បើយើងប្រើទាំងពីរ — <strong>យើងកសាងកម្ពុជាឱ្យកាន់តែប្រសើរ។</strong></p>
             </div>
         </section>
 
         <!-- SLIDE 17: CONTACT -->
         <section id="s17">
             <div class="glass-card" style="text-align: center;">
-                <h1 contenteditable="true">សំណួរ និង ចម្លើយ</h1>
-                <h2 style="margin-top: 20px;" contenteditable="true">សូមអរគុណ</h2>
-                <p style="margin: 20px 0;" contenteditable="true">តាមដានការងាររបស់ខ្ញុំ៖</p>
+                <h1>សំណួរ និង ចម្លើយ</h1>
+                <h2 style="margin-top: 20px;">សូមអរគុណ</h2>
+                <p style="margin: 20px 0;">តាមដានការងាររបស់ខ្ញុំ៖</p>
                 <div style="display: flex; justify-content: center; gap: 30px; font-size: 40px;">
                     <i class="fa-brands fa-youtube hover-glow"></i>
                     <i class="fa-brands fa-facebook hover-glow"></i>
                     <i class="fa-brands fa-tiktok hover-glow"></i>
                     <i class="fa-brands fa-telegram hover-glow"></i>
                 </div>
-                <div style="margin-top: 40px; font-weight: bold; font-size: 1.5rem; color: #fbbf24;" contenteditable="true">sophatchy.com</div>
+                <div style="margin-top: 40px; font-weight: bold; font-size: 1.5rem; color: #fbbf24;">sophatchy.com</div>
             </div>
         </section>
 
@@ -751,11 +779,6 @@
             if (e.key.toLowerCase() === 'f') {
                 toggleFullscreen();
             }
-            // Ctrl+S to Save
-            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                e.preventDefault(); 
-                downloadEditedHtml();
-            }
         });
 
         // --- NAVIGATION LOGIC ---
@@ -787,29 +810,6 @@
                 });
             }
         });
-
-        // --- SAVE FUNCTION ---
-        function downloadEditedHtml() {
-            const htmlContent = document.documentElement.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            const now = new Date();
-            const timestamp = now.getFullYear() + "-" + 
-                             String(now.getMonth() + 1).padStart(2, '0') + "-" + 
-                             String(now.getDate()).padStart(2, '0') + "_" + 
-                             String(now.getHours()).padStart(2, '0') + "-" + 
-                             String(now.getMinutes()).padStart(2, '0');
-            a.download = `Sophat_Presentation_Khmer_${timestamp}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
-            
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
-        }
     </script>
 
 </body>
