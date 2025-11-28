@@ -90,7 +90,7 @@
         @keyframes floatSlow { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
         @keyframes floatFast { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(15px); } }
 
-        /* --- 4. LAYOUT & SCROLL SNAP --- */
+        /* --- 4. LAYOUT --- */
         .snap-container { 
             height: 100vh; 
             overflow-y: scroll; 
@@ -170,16 +170,104 @@
         #prev-slide-btn { right: 30px; top: 45%; transform: translateY(-50%); }
         #next-slide-btn { right: 30px; top: 55%; transform: translateY(-50%); }
 
-        /* --- PRINT STYLES --- */
+        /* --- 7. PRINT / PDF STYLES (FIXED) --- */
         @media print {
-            @page { margin: 0; size: landscape; }
-            body { background-color: #020617 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; overflow: visible; height: auto; }
-            .ambient-bg { position: fixed; z-index: -1; }
-            .snap-container { height: auto; overflow: visible; }
-            section { height: 100vh; page-break-after: always; break-after: page; padding: 0; display: flex; align-items: center; justify-content: center; }
-            .dock, .control-btn, .nav-arrow { display: none !important; }
-            .glass-card { box-shadow: none; border: 1px solid #444; background: rgba(20, 20, 30, 0.9) !important; }
-            h1, h2, h3, p, li, span { color-adjust: exact; -webkit-print-color-adjust: exact; }
+            @page { 
+                size: landscape; 
+                margin: 0; 
+            }
+
+            /* FORCE LIGHT MODE VARIABLES FOR PRINT */
+            :root {
+                --bg-color: #ffffff !important;
+                --glass-surface: rgba(255, 255, 255, 1) !important;
+                --glass-border: #dddddd !important;
+                --glass-highlight: transparent !important;
+                --accent-primary: #d97706 !important;
+                --accent-text: #000000 !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #333333 !important;
+                --item-bg: #f8fafc !important;
+                --item-hover: #f8fafc !important;
+                --blur-strength: 0px !important;
+                --h1-gradient: none !important;
+            }
+
+            body { 
+                background-color: #ffffff !important; 
+                color: #000000 !important;
+                overflow: visible !important; 
+                height: auto !important; 
+                width: 100% !important;
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important;
+            }
+
+            /* Hide UI Elements */
+            .ambient-bg, .digital-layer, .dock, .control-btn, .nav-arrow { display: none !important; }
+
+            /* Scroll Container Reset */
+            .snap-container { 
+                height: auto !important; 
+                overflow: visible !important; 
+                display: block !important;
+            }
+
+            /* Slide Layout Fix */
+            section { 
+                height: 100vh !important; 
+                width: 100% !important;
+                page-break-after: always !important; 
+                break-after: page !important; 
+                padding: 0 !important; 
+                margin: 0 !important;
+                display: flex !important; 
+                align-items: center !important; 
+                justify-content: center !important; 
+                background-color: #ffffff !important;
+            }
+
+            /* Card Flattening */
+            .glass-card { 
+                box-shadow: none !important; 
+                border: 1px solid #eee !important; 
+                background: #ffffff !important; 
+                backdrop-filter: none !important;
+                padding: 40px !important;
+                max-width: 95% !important;
+                margin: 0 auto !important;
+            }
+
+            /* Text Visibility Fixes */
+            h1 { 
+                background: none !important; 
+                -webkit-text-fill-color: #000000 !important; 
+                color: #000000 !important;
+            }
+            h2, h3, p, li, span, div { 
+                color: #000000 !important; 
+                text-shadow: none !important;
+            }
+            
+            .tag-pill {
+                border: 1px solid #000 !important;
+                background: transparent !important;
+                color: #000 !important;
+            }
+
+            .slide-number {
+                color: #000 !important;
+                bottom: 10px !important;
+                right: 10px !important;
+                background: transparent !important;
+            }
+            
+            /* Profile Icon Visibility Fix */
+            .hero-icon {
+                -webkit-text-fill-color: #d97706 !important;
+                background: none !important;
+                color: #d97706 !important;
+            }
         }
 
     </style>
@@ -226,21 +314,40 @@
 
         <!-- S2: INTRO -->
         <section id="s2">
+            <div class="slide-number">02 / 17</div>
             <div class="glass-card">
-                <div class="grid-2">
-                    <div>
-                        <h2 data-key="s2_title">ខ្ញុំជាអ្នកណា?</h2>
-                        <div class="list-item"><span class="material-symbols-rounded list-icon">photo_camera</span><div data-key="s2_p1"><strong>អ្នកបង្កើតមាតិកាឌីជីថល</strong></div></div>
-                        <div class="list-item"><span class="material-symbols-rounded list-icon">security</span><div data-key="s2_p2"><strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាពឌីជីថល</strong> និងអក្ខរកម្មឌីជីថល</div></div>
-                        <div class="list-item"><span class="material-symbols-rounded list-icon">map</span><div data-key="s2_p3"><strong>អ្នករៀបចំកម្មវិធី</strong> បារខែមកម្ពុជា សហគមន៍ "Local Guide" នៅកម្ពុជា</div></div>
-                        <div style="margin-top: 30px; padding: 20px; border-left: 4px solid var(--accent-primary); background: rgba(251, 191, 36, 0.1);">
-                            <p style="color: var(--accent-text); font-weight: bold;" data-key="s2_mission_t">បេសកកម្មសំខាន់៖</p>
-                            <p data-key="s2_mission_d">ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស</p>
+                <!-- Header with Icon -->
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 40px;">
+                    <span class="material-symbols-rounded" style="font-size: 3rem; color: var(--accent-primary);">account_circle</span>
+                    <h2 data-key="s2_title" style="margin: 0; font-size: 2.5rem;">ខ្ញុំជាអ្នកណា?</h2>
+                </div>
+
+                <div style="max-width: 1100px; margin: 0 auto; width: 100%;">
+                    
+                    <!-- Role Grid (Clean & Spacious) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 40px;">
+                        <div class="list-item" style="padding: 25px; margin: 0;">
+                            <span class="material-symbols-rounded list-icon" style="font-size: 2.5rem;">photo_camera</span>
+                            <div data-key="s2_p1" style="font-size: 1.1rem;"><strong>អ្នកបង្កើតមាតិកាឌីជីថល</strong></div>
+                        </div>
+                        <div class="list-item" style="padding: 25px; margin: 0;">
+                            <span class="material-symbols-rounded list-icon" style="font-size: 2.5rem;">security</span>
+                            <div data-key="s2_p2" style="font-size: 1.1rem;"><strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាព</strong> និងអក្ខរកម្មឌីជីថល</div>
+                        </div>
+                        <div class="list-item" style="padding: 25px; margin: 0;">
+                            <span class="material-symbols-rounded list-icon" style="font-size: 2.5rem;">groups</span>
+                            <div data-key="s2_p4" style="font-size: 1.1rem;"><strong>អ្នកសហគមន៍បច្ចេកវិទ្យា</strong></div>
+                        </div>
+                        <div class="list-item" style="padding: 25px; margin: 0;">
+                            <span class="material-symbols-rounded list-icon" style="font-size: 2.5rem;">map</span>
+                            <div data-key="s2_p3" style="font-size: 1.1rem;"><strong>អ្នករៀបចំកម្មវិធី</strong> (Barcamp & Local Guides)</div>
                         </div>
                     </div>
-                    <!-- PROFILE ICON (Replaced Image) -->
-                    <div style="display: flex; justify-content: center; align-items: center;">
-                        <span class="material-symbols-rounded hero-icon" style="font-size: clamp(150px, 20vw, 300px); color: var(--accent-primary); opacity: 0.8;">account_circle</span>
+
+                    <!-- Mission Box (Highlighted) -->
+                    <div style="text-align: center; padding: 30px; border-radius: 20px; background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.1), transparent); border: 1px solid rgba(251, 191, 36, 0.2);">
+                        <p style="color: var(--accent-text); font-weight: bold; margin-bottom: 10px; font-size: 1.2rem; letter-spacing: 1px;" data-key="s2_mission_t">បេសកកម្មសំខាន់</p>
+                        <p data-key="s2_mission_d" style="font-size: 1.4rem;">"ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស"</p>
                     </div>
                 </div>
             </div>
@@ -411,6 +518,10 @@
                      <div>
                         <div class="list-item"><span class="material-symbols-rounded list-icon">forest</span><div data-key="s11_p4">ជំរុញទេសចរណ៍ធម្មជាតិ</div></div>
                         <div class="list-item"><span class="material-symbols-rounded list-icon">lan</span><div data-key="s11_p5">តភ្ជាប់អនឡាញ/អូហ្វឡាញ</div></div>
+                         <!-- IMAGE PLACEHOLDER -->
+                         <div class="case-study-img-container">
+                            <img src="https://via.placeholder.com/500x300/22c55e/ffffff?text=Cardamom+Map" class="case-study-img" alt="Map">
+                         </div>
                     </div>
                 </div>
             </div>
@@ -516,6 +627,77 @@
     </div>
 
     <script>
+        // --- KEYBOARD & SWIPE LOGIC ---
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const slides = document.querySelectorAll('section');
+        
+        // Find current slide index
+        function getCurrentSlideIndex() {
+            let index = 0;
+            let minDistance = Infinity;
+            
+            slides.forEach((slide, i) => {
+                const rect = slide.getBoundingClientRect();
+                const distance = Math.abs(rect.top);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    index = i;
+                }
+            });
+            return index;
+        }
+
+        // Scroll to slide
+        function scrollToSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Change Slide Wrapper
+        function changeSlide(direction) {
+            const currentIndex = getCurrentSlideIndex();
+            scrollToSlide(currentIndex + direction);
+        }
+
+        // Keyboard Listener
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key.toLowerCase() === 'f') {
+                toggleFullscreen();
+            } else if (e.key.toLowerCase() === 't') {
+                toggleTheme();
+            } else if (e.key.toLowerCase() === 'l') {
+                toggleLanguage();
+            }
+        });
+
+        // Touch Listeners
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: false});
+
+        document.addEventListener('touchend', e => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, {passive: false});
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchStartY - touchEndY > swipeThreshold) {
+                // Swipe Up -> Next Slide
+                changeSlide(1);
+            } else if (touchEndY - touchStartY > swipeThreshold) {
+                // Swipe Down -> Prev Slide
+                changeSlide(-1);
+            }
+        }
+
         // --- LANGUAGE DATA ---
         const translations = {
             kh: {
@@ -527,8 +709,9 @@
                 
                 s2_title: "ខ្ញុំជាអ្នកណា?",
                 s2_p1: "<strong>អ្នកបង្កើតមាតិកាឌីជីថល</strong>",
-                s2_p2: "<strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាពឌីជីថល</strong> និងអក្ខរកម្មឌីជីថល",
-                s2_p3: "<strong>អ្នករៀបចំកម្មវិធី</strong> បារខែមកម្ពុជា សហគមន៍ \"Local Guide\" នៅកម្ពុជា",
+                s2_p2: "<strong>អ្នកបណ្ដុះបណ្ដាលសុវត្ថិភាព</strong> និងអក្ខរកម្មឌីជីថល",
+                s2_p3: "<strong>អ្នករៀបចំកម្មវិធី</strong> (Barcamp & Local Guides)",
+                s2_p4: "<strong>អ្នកសហគមន៍បច្ចេកវិទ្យា</strong>",
                 s2_mission_t: "បេសកកម្មសំខាន់៖",
                 s2_mission_d: "ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស",
 
@@ -609,8 +792,9 @@
                 
                 s2_title: "Who Am I?",
                 s2_p1: "<strong>Digital Content Creator</strong>",
-                s2_p2: "<strong>Digital Safety & Digital Literacy Trainer</strong>",
-                s2_p3: "<strong>Organizer</strong>: Barcamp Cambodia, Cambodia Local Guides Community",
+                s2_p2: "<strong>Digital Safety & Literacy Trainer</strong>",
+                s2_p3: "<strong>Program Organizer</strong> (Barcamp & Local Guides)",
+                s2_p4: "<strong>Tech Community Builder</strong>",
                 s2_mission_t: "Key Mission:",
                 s2_mission_d: "Using technology to connect people, communities, and opportunities",
 
@@ -726,81 +910,6 @@
         }
 
         // --- NAVIGATION LOGIC ---
-        
-        let touchStartY = 0;
-        let touchEndY = 0;
-        const slides = document.querySelectorAll('section');
-
-        // Find current slide index based on scroll position
-        function getCurrentSlideIndex() {
-            let index = 0;
-            let minDistance = Infinity;
-            
-            slides.forEach((slide, i) => {
-                const rect = slide.getBoundingClientRect();
-                const distance = Math.abs(rect.top); // Distance from top of viewport
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    index = i;
-                }
-            });
-            return index;
-        }
-
-        // Scroll to specific slide index
-        function scrollToSlide(index) {
-            if (index < 0 || index >= slides.length) return;
-            slides[index].scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Change slide based on direction (-1 for prev, 1 for next)
-        function changeSlide(direction) {
-            const currentIndex = getCurrentSlideIndex();
-            scrollToSlide(currentIndex + direction);
-        }
-
-        // Keyboard Listener
-        document.addEventListener('keydown', (e) => {
-            // Navigation
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                e.preventDefault();
-                changeSlide(1);
-            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                e.preventDefault();
-                changeSlide(-1);
-            } 
-            // Shortcuts
-            else if (e.key.toLowerCase() === 'f') {
-                toggleFullscreen();
-            } else if (e.key.toLowerCase() === 't') {
-                toggleTheme();
-            } else if (e.key.toLowerCase() === 'l') {
-                toggleLanguage();
-            }
-        });
-
-        // Touch Listeners for Swipe
-        document.addEventListener('touchstart', e => {
-            touchStartY = e.changedTouches[0].screenY;
-        }, {passive: false});
-
-        document.addEventListener('touchend', e => {
-            touchEndY = e.changedTouches[0].screenY;
-            handleSwipe();
-        }, {passive: false});
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            if (touchStartY - touchEndY > swipeThreshold) {
-                // Swipe Up -> Next Slide
-                changeSlide(1);
-            } else if (touchEndY - touchStartY > swipeThreshold) {
-                // Swipe Down -> Prev Slide
-                changeSlide(-1);
-            }
-        }
-
-        // Dock Active State Logic
         function setActive(element) {
             document.querySelectorAll('.dock-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
