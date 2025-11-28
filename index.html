@@ -91,8 +91,26 @@
         @keyframes floatFast { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(15px); } }
 
         /* --- 4. LAYOUT --- */
-        .snap-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scroll-behavior: smooth; position: relative; z-index: 10; }
-        section { height: 100vh; width: 100vw; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; position: relative; padding: 5vh 5vw; }
+        .snap-container { 
+            height: 100vh; 
+            overflow-y: scroll; 
+            scroll-snap-type: y mandatory; 
+            scroll-behavior: smooth; 
+            position: relative; 
+            z-index: 10;
+            /* Hide scrollbar for cleaner look */
+            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .snap-container::-webkit-scrollbar { display: none; }
+
+        section { 
+            height: 100vh; width: 100vw; 
+            scroll-snap-align: start; scroll-snap-stop: always;
+            display: flex; align-items: center; justify-content: center; 
+            position: relative; padding: 5vh 5vw; 
+        }
+        
         .glass-card { background: var(--glass-surface); backdrop-filter: blur(var(--blur-strength)); -webkit-backdrop-filter: blur(var(--blur-strength)); border: 1px solid var(--glass-border); border-radius: 30px; padding: clamp(30px, 5vw, 80px); box-shadow: 0 30px 60px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.1); width: 100%; max-width: 1600px; transition: transform 0.4s, background 0.5s, border-color 0.5s; position: relative; z-index: 10; display: flex; flex-direction: column; justify-content: center; }
         @media (min-width: 1024px) { .glass-card:hover { transform: perspective(1000px) rotateX(1deg) scale(1.005); border-color: var(--glass-highlight); } }
 
@@ -114,6 +132,12 @@
         .feature-box { background: var(--item-bg); padding: clamp(20px, 3vw, 40px); border-radius: 24px; border: 1px solid var(--glass-border); text-align: center; transition: 0.3s; height: 100%; }
         .feature-box:hover { background: var(--item-hover); transform: translateY(-5px); }
 
+        /* --- NEW IMAGE STYLES --- */
+        .profile-img-container { width: 300px; height: 300px; border-radius: 50%; border: 4px solid var(--accent-primary); overflow: hidden; box-shadow: 0 0 40px rgba(251, 191, 36, 0.3); margin: 0 auto; position: relative; }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; }
+        .case-study-img-container { width: 100%; max-width: 500px; height: 300px; border-radius: 20px; border: 1px solid var(--glass-border); overflow: hidden; margin: 20px auto; position: relative; }
+        .case-study-img { width: 100%; height: 100%; object-fit: cover; }
+
         /* --- 5. DOCK & BUTTONS --- */
         .dock { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--dock-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 100px; padding: 10px 20px; display: flex; gap: 15px; z-index: 100; box-shadow: 0 20px 40px rgba(0,0,0,0.3); max-width: 95vw; overflow-x: auto; transition: background 0.5s; }
         .dock-item { width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--text-primary); text-decoration: none; font-size: 24px; transition: 0.3s; position: relative; }
@@ -128,6 +152,18 @@
         #fullscreen-btn { right: 30px; }
         #theme-btn { right: 90px; }
         #lang-btn { right: 150px; }
+
+        /* --- 6. NAV ARROWS (SIDE) --- */
+        .nav-arrow {
+            position: fixed; top: 50%; width: 50px; height: 50px; 
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 100; transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .nav-arrow:hover { background: var(--accent-primary); color: #000; transform: scale(1.2); }
+        #prev-slide-btn { right: 30px; top: 45%; transform: translateY(-50%); }
+        #next-slide-btn { right: 30px; top: 55%; transform: translateY(-50%); }
 
     </style>
 </head>
@@ -146,6 +182,10 @@
     <button id="lang-btn" class="control-btn" onclick="toggleLanguage()" title="Switch Language (Press L)">KH</button>
     <button id="theme-btn" class="control-btn" onclick="toggleTheme()" title="Toggle Theme (Press T)"><span class="material-symbols-rounded">light_mode</span></button>
     <button id="fullscreen-btn" class="control-btn" onclick="toggleFullscreen()" title="Full Screen (Press F)"><span class="material-symbols-rounded">fullscreen</span></button>
+
+    <!-- SIDE NAV -->
+    <div id="prev-slide-btn" class="nav-arrow" onclick="changeSlide(-1)" title="Previous Slide (Up/Left)"><span class="material-symbols-rounded">keyboard_arrow_up</span></div>
+    <div id="next-slide-btn" class="nav-arrow" onclick="changeSlide(1)" title="Next Slide (Down/Right)"><span class="material-symbols-rounded">keyboard_arrow_down</span></div>
 
     <!-- SCROLLER -->
     <div class="snap-container" id="scroller">
@@ -179,7 +219,12 @@
                             <p data-key="s2_mission_d">ប្រើប្រាស់បច្ចេកវិទ្យា ដើម្បីភ្ជាប់មនុស្ស សហគមន៍ និងឱកាស</p>
                         </div>
                     </div>
-                    <div style="display: flex; justify-content: center;"><span class="material-symbols-rounded hero-icon">person</span></div>
+                    <!-- IMAGE PLACEHOLDER -->
+                    <div style="display: flex; justify-content: center;">
+                        <div class="profile-img-container">
+                            <img src="https://via.placeholder.com/300/334155/ffffff?text=Sophat+CHY" class="profile-img" alt="Sophat CHY">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -339,7 +384,10 @@
                      <div>
                         <div class="list-item"><span class="material-symbols-rounded list-icon">forest</span><div data-key="s11_p4">ជំរុញទេសចរណ៍ធម្មជាតិ</div></div>
                         <div class="list-item"><span class="material-symbols-rounded list-icon">lan</span><div data-key="s11_p5">តភ្ជាប់អនឡាញ/អូហ្វឡាញ</div></div>
-                         <div style="display: flex; justify-content: center; margin-top: 20px;"><span class="material-symbols-rounded hero-icon" style="color: #4ade80;">landscape</span></div>
+                         <!-- IMAGE PLACEHOLDER -->
+                         <div class="case-study-img-container">
+                            <img src="https://via.placeholder.com/500x300/22c55e/ffffff?text=Cardamom+Map" class="case-study-img" alt="Map">
+                         </div>
                     </div>
                 </div>
             </div>
@@ -439,6 +487,77 @@
     </div>
 
     <script>
+        // --- KEYBOARD & SWIPE LOGIC ---
+        let touchStartY = 0;
+        let touchEndY = 0;
+        const slides = document.querySelectorAll('section');
+        
+        // Find current slide index
+        function getCurrentSlideIndex() {
+            let index = 0;
+            let minDistance = Infinity;
+            
+            slides.forEach((slide, i) => {
+                const rect = slide.getBoundingClientRect();
+                const distance = Math.abs(rect.top);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    index = i;
+                }
+            });
+            return index;
+        }
+
+        // Scroll to slide
+        function scrollToSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Change Slide Wrapper
+        function changeSlide(direction) {
+            const currentIndex = getCurrentSlideIndex();
+            scrollToSlide(currentIndex + direction);
+        }
+
+        // Keyboard Listener
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key.toLowerCase() === 'f') {
+                toggleFullscreen();
+            } else if (e.key.toLowerCase() === 't') {
+                toggleTheme();
+            } else if (e.key.toLowerCase() === 'l') {
+                toggleLanguage();
+            }
+        });
+
+        // Touch Listeners
+        document.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: false});
+
+        document.addEventListener('touchend', e => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, {passive: false});
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchStartY - touchEndY > swipeThreshold) {
+                // Swipe Up -> Next Slide
+                changeSlide(1);
+            } else if (touchEndY - touchStartY > swipeThreshold) {
+                // Swipe Down -> Prev Slide
+                changeSlide(-1);
+            }
+        }
+
         // --- LANGUAGE DATA ---
         const translations = {
             kh: {
