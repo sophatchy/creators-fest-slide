@@ -170,103 +170,91 @@
         #prev-slide-btn { right: 30px; top: 45%; transform: translateY(-50%); }
         #next-slide-btn { right: 30px; top: 55%; transform: translateY(-50%); }
 
-        /* --- 7. PRINT / PDF STYLES (FIXED) --- */
+        /* --- 7. PRINT / PDF STYLES (STRICT A4 FIX) --- */
         @media print {
+            /* Force A4 Landscape with strict size */
             @page { 
-                size: landscape; 
+                size: A4 landscape; 
                 margin: 0; 
             }
 
-            /* FORCE LIGHT MODE VARIABLES FOR PRINT */
-            :root {
-                --bg-color: #ffffff !important;
-                --glass-surface: rgba(255, 255, 255, 1) !important;
-                --glass-border: #dddddd !important;
-                --glass-highlight: transparent !important;
-                --accent-primary: #d97706 !important;
-                --accent-text: #000000 !important;
-                --text-primary: #000000 !important;
-                --text-secondary: #333333 !important;
-                --item-bg: #f8fafc !important;
-                --item-hover: #f8fafc !important;
-                --blur-strength: 0px !important;
-                --h1-gradient: none !important;
-            }
-
-            body { 
-                background-color: #ffffff !important; 
-                color: #000000 !important;
-                overflow: visible !important; 
-                height: auto !important; 
-                width: 100% !important;
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important;
-            }
-
-            /* Hide UI Elements */
-            .ambient-bg, .digital-layer, .dock, .control-btn, .nav-arrow { display: none !important; }
-
-            /* Scroll Container Reset */
-            .snap-container { 
-                height: auto !important; 
-                overflow: visible !important; 
-                display: block !important;
-            }
-
-            /* Slide Layout Fix */
-            section { 
-                height: 100vh !important; 
-                width: 100% !important;
-                page-break-after: always !important; 
-                break-after: page !important; 
-                padding: 0 !important; 
-                margin: 0 !important;
-                display: flex !important; 
-                align-items: center !important; 
-                justify-content: center !important; 
+            html, body {
+                width: 297mm; /* Exact A4 width */
+                height: 210mm; /* Exact A4 height */
+                margin: 0;
+                padding: 0;
                 background-color: #ffffff !important;
-            }
-
-            /* Card Flattening */
-            .glass-card { 
-                box-shadow: none !important; 
-                border: 1px solid #eee !important; 
-                background: #ffffff !important; 
-                backdrop-filter: none !important;
-                padding: 40px !important;
-                max-width: 95% !important;
-                margin: 0 auto !important;
-            }
-
-            /* Text Visibility Fixes */
-            h1 { 
-                background: none !important; 
-                -webkit-text-fill-color: #000000 !important; 
                 color: #000000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                overflow: visible !important;
             }
-            h2, h3, p, li, span, div { 
-                color: #000000 !important; 
-                text-shadow: none !important;
+
+            /* Hide everything unrelated */
+            .ambient-bg, .digital-layer, .dock, .control-btn, .nav-arrow, #toast { 
+                display: none !important; 
             }
+
+            /* Reset container to flow normally */
+            .snap-container {
+                height: auto !important;
+                overflow: visible !important;
+                display: block !important;
+                width: 100% !important;
+            }
+
+            /* Strict Slide Layout */
+            section {
+                height: 210mm !important; /* Force height to match page */
+                width: 297mm !important;  /* Force width to match page */
+                page-break-after: always !important; /* Force new page after every section */
+                break-after: page !important;
+                page-break-inside: avoid !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background-color: #ffffff !important;
+                position: relative !important;
+            }
+
+            /* Scale content down slightly to ensure it fits margins */
+            .glass-card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important; /* Light border for structure */
+                background: transparent !important;
+                backdrop-filter: none !important;
+                padding: 20px !important;
+                width: 90% !important; /* Margin safety */
+                height: auto !important;
+                transform: scale(0.95) !important; /* Slight shrink to fit */
+                transform-origin: center center !important;
+            }
+
+            /* Force Text Contrast */
+            h1 { background: none !important; -webkit-text-fill-color: #000 !important; color: #000 !important; }
+            h2, h3, p, li, span, div { color: #000 !important; text-shadow: none !important; }
             
-            .tag-pill {
+            .tag-pill, .list-item, .feature-box, .profile-img-container, .case-study-img-container {
                 border: 1px solid #000 !important;
                 background: transparent !important;
-                color: #000 !important;
+                box-shadow: none !important;
             }
 
+            /* Ensure slide number prints */
             .slide-number {
                 color: #000 !important;
-                bottom: 10px !important;
-                right: 10px !important;
+                bottom: 10mm !important;
+                right: 10mm !important;
                 background: transparent !important;
+                font-size: 10pt !important;
             }
             
-            /* Profile Icon Visibility Fix */
-            .hero-icon {
-                -webkit-text-fill-color: #d97706 !important;
-                background: none !important;
-                color: #d97706 !important;
+            /* Ensure Icons print nicely */
+            .material-symbols-rounded, .fa-brands, .list-icon, .hero-icon {
+                color: #000 !important;
+                -webkit-text-fill-color: #000 !important;
             }
         }
 
